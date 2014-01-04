@@ -10,4 +10,4 @@ db = SQLAlchemy(app)
 # login_manager.init_app(app)
 # login_manager.login_view = 'login'
 
-from forms import models
+from forms import models, views
