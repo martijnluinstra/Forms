@@ -70,14 +70,13 @@ class Activity(db.Model):
 class Form(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
-    deadline = db.Column(db.DateTime)
+    deadline = db.Column(db.DateTime, nullable=True)
     fields = db.relationship('Field', backref='form',
                               lazy='dynamic')
     entries = db.relationship('Entry', backref='form',
                                lazy='dynamic')
 
-    def __init__(self, activity_id, deadline):
-        self.name = name
+    def __init__(self, activity_id, deadline=None):
         self.activity_id = activity_id
         self.deadline = deadline
 
@@ -89,10 +88,12 @@ class Field(db.Model):
     display_index = db.Column(db.Integer)
     data_type = db.Column(db.Integer)
     required = db.Column(db.Boolean)
+    __table_args__ = (db.UniqueConstraint('form_id', 'display_index'),
+        )
 
     def __init__(self, form_id, label, display_index, data_type, required=True):
-        self.label = label
         self.form_id = form_id
+        self.label = label
         self.display_index = display_index
         self.data_type = data_type
         self.required = required
